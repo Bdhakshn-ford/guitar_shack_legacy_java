@@ -2,8 +2,6 @@ package com.guitarshack;
 
 import com.google.gson.Gson;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,15 +30,9 @@ public class StockMonitor {
         }
         String result = request.executeRequest(baseURL, paramString);
         Product product = new Gson().fromJson(result, Product.class);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(today.date());
-        calendar.add(Calendar.YEAR, -1);
-        Date startDate = calendar.getTime();
-
-        calendar.add(Calendar.DATE, 30);
-        Date endDate = calendar.getTime();
-        SalesTotal total = salesHistory.getSalesTotal(product, startDate, endDate);
-        if (product.getStock() - quantity <= (int) ((double) (total.getTotal() / 30) * product.getLeadTime()))
+        int restockLevel = new RestockLevel(salesHistory, today).getRestockLevel(product);
+        if (product.getStock() - quantity <= restockLevel)
             alert.send(product);
     }
+
 }
