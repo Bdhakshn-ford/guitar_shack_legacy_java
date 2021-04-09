@@ -34,9 +34,11 @@ public class StockMonitor {
         Product product = new Gson().fromJson(result, Product.class);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(today.date());
-        Date endDate = calendar.getTime();
         calendar.add(Calendar.YEAR, -1);
         Date startDate = calendar.getTime();
+
+        calendar.add(Calendar.DATE, 30);
+        Date endDate = calendar.getTime();
         SalesTotal total = salesHistory.getSalesTotal(product, startDate, endDate);
         if (product.getStock() - quantity <= (int) ((double) (total.getTotal() / 30) * product.getLeadTime()))
             alert.send(product);
