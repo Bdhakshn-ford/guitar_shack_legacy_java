@@ -11,10 +11,11 @@ import java.util.Map;
 
 public class StockMonitor {
     private final Alert alert;
-    private final Request request = new Request();
+    private final Request request;
 
-    public StockMonitor(Alert alert) {
+    public StockMonitor(Alert alert, Request request) {
         this.alert = alert;
+        this.request = request;
     }
 
     public void productSold(int productId, int quantity) {
